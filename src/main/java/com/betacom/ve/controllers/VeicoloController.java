@@ -1,0 +1,42 @@
+package com.betacom.ve.controllers;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.betacom.ve.services.interfaces.IVeicoliServices;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RequiredArgsConstructor
+@RestController
+@RequestMapping ("rest/veicolo")
+public class VeicoloController {
+
+	private final IVeicoliServices veiS;	
+	
+	@GetMapping("/list")
+	public ResponseEntity<Object> list(
+			@RequestParam (required = false)  Integer id,
+			@RequestParam (required = false)  Integer tipo,
+			@RequestParam (required = false)  String categoria,
+			@RequestParam (required = false)  String alimentazione,
+			@RequestParam (required = false)  Integer colore,
+			@RequestParam (required = false)  Integer marca,
+			@RequestParam (required = false)  String targa,
+			@RequestParam (required = false)  Integer porte
+			) throws Exception{
+		return ResponseEntity.ok(veiS.find(id, tipo, categoria, alimentazione, colore, marca, targa, porte));
+		
+	}
+	
+	@GetMapping("/getById")
+	public ResponseEntity<Object> getById(@RequestParam (required = false)  Integer id) throws Exception{
+		return ResponseEntity.ok(veiS.getById(id));
+		
+	}
+}
