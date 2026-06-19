@@ -41,7 +41,7 @@ public class TipoVeicoloController {
 	}
 	
 	@DeleteMapping("delete/{id}")
-	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  String id) throws Exception{
+	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  Integer id) throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		tipoS.delete(id);
 		r.setMsg(msgS.get("rest_deleted"));
