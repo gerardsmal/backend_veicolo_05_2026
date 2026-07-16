@@ -22,13 +22,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping ("rest/macchina")
+@RequestMapping ("/rest/macchina")
 public class MacchinaController {
 
 	private final IMacchinaServices macS;
 	private final IMessageServices   msgS;
 	
-	@PostMapping("/create")
+	@PostMapping("/admin/create")
 	public ResponseEntity<ResponseDTO> create(@RequestBody(required = true) @Validated(ValidationGroups.Create.class) MacchinaReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -37,7 +37,7 @@ public class MacchinaController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@PatchMapping("/update")
+	@PatchMapping("/admin/update")
 	public ResponseEntity<ResponseDTO> update(@RequestBody(required = true) @Validated(ValidationGroups.Update.class) MacchinaReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -46,7 +46,7 @@ public class MacchinaController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  Integer id) throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		macS.delete(id);

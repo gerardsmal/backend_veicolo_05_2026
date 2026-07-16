@@ -28,7 +28,7 @@ public class MotoController {
 	private final IMotoServices motS;
 	private final IMessageServices   msgS;
 	
-	@PostMapping("/create")
+	@PostMapping("/admin/create")
 	public ResponseEntity<ResponseDTO> create(@RequestBody(required = true) @Validated(ValidationGroups.Create.class) MotoReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -37,7 +37,7 @@ public class MotoController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@PatchMapping("/update")
+	@PatchMapping("/admin/update")
 	public ResponseEntity<ResponseDTO> update(@RequestBody(required = true) @Validated(ValidationGroups.Update.class) MotoReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -46,7 +46,7 @@ public class MotoController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  Integer id) throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		motS.delete(id);

@@ -31,7 +31,7 @@ public class TipoVeicoloController {
 	private final ITipoVeicoloServices tipoS;
 	private final IMessageServices  msgS;
 	
-	@PostMapping("/create")
+	@PostMapping("/admin/create")
 	public ResponseEntity<ResponseDTO> create(@RequestBody(required = true) @Validated(ValidationGroups.Create.class) TipoVeicoloReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -40,7 +40,7 @@ public class TipoVeicoloController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  Integer id) throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		tipoS.delete(id);
@@ -48,7 +48,7 @@ public class TipoVeicoloController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/public/list")
 	public ResponseEntity<Object> list() throws Exception{
 		return ResponseEntity.ok(tipoS.list());
 	}

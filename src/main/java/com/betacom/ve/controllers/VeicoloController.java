@@ -19,7 +19,7 @@ public class VeicoloController {
 
 	private final IVeicoliServices veiS;	
 	
-	@GetMapping("/list")
+	@GetMapping("/public/list")
 	public ResponseEntity<Object> list(
 			@RequestParam (required = false)  Integer id,
 			@RequestParam (required = false)  Integer tipo,
@@ -34,7 +34,7 @@ public class VeicoloController {
 		
 	}
 	
-	@GetMapping("/getById")
+	@GetMapping("/public/getById")
 	public ResponseEntity<Object> getById(@RequestParam (required = false)  Integer id) throws Exception{
 		return ResponseEntity.ok(veiS.getById(id));
 		

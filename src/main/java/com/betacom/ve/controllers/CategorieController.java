@@ -29,7 +29,7 @@ public class CategorieController {
 	private final ICategorieServices catS;
 	private final IMessageServices  msgS;
 	
-	@PostMapping("/create")
+	@PostMapping("/admin/create")
 	public ResponseEntity<ResponseDTO> create(@RequestBody(required = true) @Validated(ValidationGroups.Create.class) KeyStringReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -38,7 +38,7 @@ public class CategorieController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  String id) throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		catS.delete(id);
@@ -46,7 +46,7 @@ public class CategorieController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/public/list")
 	public ResponseEntity<Object> list(@RequestParam (required = false)  String pattern) throws Exception{
 		return ResponseEntity.ok(catS.list(pattern));
 	}

@@ -32,7 +32,7 @@ public class ColoreController {
 	private final IColoreServices colS;
 	private final IMessageServices  msgS;
 	
-	@PostMapping("/create")
+	@PostMapping("/admin/create")
 	public ResponseEntity<ResponseDTO> create(@RequestBody(required = true) @Validated(ValidationGroups.Create.class) KeyIntegerReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -41,7 +41,7 @@ public class ColoreController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  Integer id) throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		colS.delete(id);
@@ -49,7 +49,7 @@ public class ColoreController {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/public/list")
 	public ResponseEntity<Object> list() throws Exception{
 		return ResponseEntity.ok(colS.list());
 	}
