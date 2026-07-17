@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.betacom.ve.dto.input.ChangePwdReq;
 import com.betacom.ve.dto.input.UtenteReq;
 import com.betacom.ve.dto.input.ValidationGroups;
 import com.betacom.ve.dto.output.ResponseDTO;
@@ -44,6 +46,14 @@ public class UtenteController {
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		utS.update(req);
+		r.setMsg(msgS.get("rest_updated"));
+		return ResponseEntity.ok(r);			
+	}
+	
+	@PutMapping("/user/changePwd")
+	public ResponseEntity<ResponseDTO> changePwd(@RequestBody(required = true) @Validated(ValidationGroups.Update.class) ChangePwdReq req) throws Exception{
+		ResponseDTO r = new ResponseDTO();
+		utS.changePwd(req);
 		r.setMsg(msgS.get("rest_updated"));
 		return ResponseEntity.ok(r);			
 	}

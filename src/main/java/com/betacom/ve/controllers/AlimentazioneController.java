@@ -25,12 +25,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping ("rest/alimentazione")
-public class AlimentazioneControlle {
+public class AlimentazioneController {
 
 	private final ITipoAlimentazioneServices tipoS;
 	private final IMessageServices  msgS;
 	
-	@PostMapping("/create")
+	@PostMapping("/admin/create")
 	public ResponseEntity<ResponseDTO> create(@RequestBody(required = true) @Validated(ValidationGroups.Create.class) KeyStringReq req) 
 			throws Exception{
 		ResponseDTO r = new ResponseDTO();
@@ -39,7 +39,7 @@ public class AlimentazioneControlle {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@DeleteMapping("delete/{id}")
+	@DeleteMapping("/admin/delete/{id}")
 	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true)  String id) throws Exception{
 		ResponseDTO r = new ResponseDTO();
 		tipoS.delete(id);
@@ -47,7 +47,7 @@ public class AlimentazioneControlle {
 		return ResponseEntity.ok(r);		
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/public/list")
 	public ResponseEntity<Object> list(@RequestParam (required = false)  String pattern) throws Exception{
 		return ResponseEntity.ok(tipoS.list(pattern));
 	}

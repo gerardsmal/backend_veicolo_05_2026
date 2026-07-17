@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.ve.dto.input.ChangePwdReq;
 import com.betacom.ve.dto.input.LoginReq;
 import com.betacom.ve.dto.input.UtenteReq;
 import com.betacom.ve.dto.output.LoginDTO;
@@ -167,7 +168,26 @@ public class UtenteImpl implements IUtenteServices{
 				.build();
 	}
 
+	@Transactional (rollbackFor = Exception.class)
+	@Override
+	public void changePwd(ChangePwdReq req) throws Exception {
+		log.debug("changePwd {}", req);
+		
+		Utente ut = utR.findById(req.getUserName())
+				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 
+		if (!encoder.matches(req.getOldPwd(), ut.getPwd()))
+			throw new Exception("login_invalid");
+		
+		Optional.ofNullable(req.getNewPwd())
+			.ifPresentOrElse(pwd -> {
+				ut.setPwd(encoder.encode(req.getNewPwd()));
+			}, () -> { 
+				throw new RuntimeException("user_no_newpwd");
+			});
+		
+		utR.save(ut);
+	}
 
 
 }

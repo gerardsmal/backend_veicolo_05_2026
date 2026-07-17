@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.betacom.ve.dto.output.VeicoloDTO;
 import com.betacom.ve.models.Veicolo;
+import com.betacom.ve.services.interfaces.IUploadServices;
 
 import java.util.List;
 
@@ -12,7 +13,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Component
 public class VeicoloMapper {
-
+	private final IUploadServices uplS; 
+	
 	public  VeicoloDTO builVeicoloDTO(Veicolo v) {
 		return VeicoloDTO.builder()
 				.id(v.getId())
@@ -20,6 +22,7 @@ public class VeicoloMapper {
 				.modello(v.getModello())
 				.annoProduzione(v.getAnnoProduzione())
 				.prezzo(v.getPrezzo())
+				.image(v.getImage() == null ? null : uplS.buildUrl(v.getImage()))
 				.dataInserimento(v.getDataInserimento())
 				.tipoVeicolo(TipoVeicoloMapper.tipoVeicoloToDTO(v.getTipoVeicolo()))
 				.categoria(KeyStringMapper.keyStringToDTO(v.getCategorie()))
