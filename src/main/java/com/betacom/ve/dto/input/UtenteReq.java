@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 public class UtenteReq {
 	
-	@NotNull (groups = {ValidationGroups.Create.class, ValidationGroups.Update.class} , message ="user_incomplete")
+	@NotNull (groups = {ValidationGroups.Create.class} , message ="user_incomplete")
 	private String userName;
 	
 	@NotNull (groups = ValidationGroups.Create.class , message ="user_incomplete")

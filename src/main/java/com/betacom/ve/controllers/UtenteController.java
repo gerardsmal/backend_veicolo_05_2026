@@ -1,6 +1,7 @@
 package com.betacom.ve.controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,8 +43,10 @@ public class UtenteController {
 	}
 	
 	@PatchMapping("/user/update")
-	public ResponseEntity<ResponseDTO> update(@RequestBody(required = true) @Validated(ValidationGroups.Update.class) UtenteReq req)
+	public ResponseEntity<ResponseDTO> update(@RequestBody(required = true) @Validated(ValidationGroups.Update.class) UtenteReq req,
+			Authentication authentication)
 			throws Exception{
+		req.setUserName(authentication.getName());
 		ResponseDTO r = new ResponseDTO();
 		utS.update(req);
 		r.setMsg(msgS.get("rest_updated"));
@@ -51,8 +54,11 @@ public class UtenteController {
 	}
 	
 	@PutMapping("/user/changePwd")
-	public ResponseEntity<ResponseDTO> changePwd(@RequestBody(required = true) @Validated(ValidationGroups.Update.class) ChangePwdReq req) throws Exception{
+	public ResponseEntity<ResponseDTO> changePwd(@RequestBody(required = true) @Validated(ValidationGroups.Update.class) ChangePwdReq req,
+			Authentication authentication
+			) throws Exception{
 		ResponseDTO r = new ResponseDTO();
+		req.setUserName(authentication.getName());
 		utS.changePwd(req);
 		r.setMsg(msgS.get("rest_updated"));
 		return ResponseEntity.ok(r);			
@@ -79,8 +85,11 @@ public class UtenteController {
 	}
 	
 	@GetMapping("/user/getById")
-	public ResponseEntity<Object> getById(@RequestParam (required = true)  String userName) throws Exception{
-
+	public ResponseEntity<Object> getById(@RequestParam (required = false)  String userName,
+			Authentication authentication
+			) throws Exception{
+		if (userName == null) userName = authentication.getName();
+		
 		return ResponseEntity.ok(utS.getById(userName));		
 		
 	}

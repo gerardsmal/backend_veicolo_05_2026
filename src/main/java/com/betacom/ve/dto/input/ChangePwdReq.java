@@ -10,7 +10,6 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ChangePwdReq {
-	@NotNull (groups = ValidationGroups.Update.class , message ="login_invalid")
 	String userName;
 	@NotNull (groups = ValidationGroups.Update.class , message ="login_invalid")
 	String oldPwd;
