@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.betacom.ve.dto.input.ChangePwdReq;
 import com.betacom.ve.dto.input.LoginReq;
 import com.betacom.ve.dto.input.UtenteReq;
-import com.betacom.ve.dto.output.LoginDTO;
+import com.betacom.ve.dto.output.MeDTO;
 import com.betacom.ve.dto.output.UtenteDTO;
 import com.betacom.ve.enums.Roles;
 import com.betacom.ve.exceptions.AcademyException;
@@ -154,14 +154,12 @@ public class UtenteImpl implements IUtenteServices{
 	
 	
 	@Override
-	public LoginDTO login(LoginReq req) throws Exception {
+	public MeDTO me(LoginReq req) throws Exception {
 		log.debug("login {}", req);
 		Utente ut = utR.findById(req.getUserName())
 				.orElseThrow(() -> new AcademyException("user_invalid_pwd"));
-		if (!encoder.matches(req.getPwd(), ut.getPwd()))
-			throw new AcademyException("user_invalid_pwd");
 		
-		return LoginDTO.builder()
+		return MeDTO.builder()
 				.id(ut.getUserName())
 				.role(ut.getRole().toString())
 				.mailValidate(ut.getValidate())
