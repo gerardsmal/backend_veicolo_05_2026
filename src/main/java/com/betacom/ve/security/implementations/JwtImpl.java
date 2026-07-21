@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.betacom.ve.security.interfaces.JwtServices;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -70,17 +72,49 @@ public class JwtImpl implements JwtServices {
 		List<String> roles = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
 		String t = Jwts.builder()
-	                .subject(authentication.getName())
-	                .claim("roles", roles)
-	                .issuedAt(Date.from(now))
-	                .expiration(Date.from(now.plusSeconds(refreshTokenExpirationDays * 86400 )))  // seconds * day
-	                .signWith(key, Jwts.SIG.HS512)
-	                .compact();
+		    .subject(authentication.getName())
+		    .claim("tokenType", "REFRESH")
+		    .issuedAt(Date.from(now))
+		    .expiration(Date.from(now.plusSeconds(refreshTokenExpirationDays * 86400)))
+		    .signWith(key, Jwts.SIG.HS512)
+		    .compact();
 		 
 		 log.debug("Token : {}",t);
 	        
 	     return t;
 		 
+	}
+
+	@Override
+	public boolean isValidRefreshToken(String token) throws Exception{
+	    try {
+	        Claims claims = extractAllClaims(token);
+
+	        String tokenType = claims.get(
+	                "tokenType",
+	                String.class
+	        );
+
+	        return "REFRESH".equals(tokenType)
+	                && claims.getExpiration().after(new Date());
+
+	    } catch (JwtException | IllegalArgumentException e) {
+	        return false;
+	    }
+	}
+	
+	@Override
+	public String extractUsername(String token) {
+	    return extractAllClaims(token).getSubject();
+	}
+	
+	
+	private Claims extractAllClaims(String token) {
+	    return Jwts.parser()
+	            .verifyWith(key)
+	            .build()
+	            .parseSignedClaims(token)
+	            .getPayload();
 	}
 
 }

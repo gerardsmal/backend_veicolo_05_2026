@@ -31,8 +31,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 		
 		Utente ut = utR.findById(username)
 				.orElseThrow(() -> new UsernameNotFoundException("login_invalid"));
-		log.debug("after read : {}" + ut.toString());
-        return User.builder()
+
+		return User.builder()
                 .username(ut.getUserName())
                 .password(ut.getPwd()) 
                 .roles(ut.getRole().toString())       // "ADMIN" o "USER"

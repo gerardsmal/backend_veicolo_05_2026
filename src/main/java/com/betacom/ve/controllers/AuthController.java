@@ -3,12 +3,15 @@ package com.betacom.ve.controllers;
 import java.time.Duration;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.betacom.ve.dto.input.LoginReq;
 import com.betacom.ve.dto.input.ValidationGroups;
 import com.betacom.ve.dto.output.LoginDTO;
+import com.betacom.ve.security.CustomUserDetailsService;
 import com.betacom.ve.security.interfaces.JwtServices;
 import com.betacom.ve.services.interfaces.IUtenteServices;
 
@@ -33,6 +37,7 @@ public class AuthController {
 	private final IUtenteServices utS;
 	private final AuthenticationManager authenticationManager;
 	private final JwtServices jwtService;
+	private final CustomUserDetailsService userDetailsService;
 
 	@PostMapping("/login")
 	public ResponseEntity<Object> login(@RequestBody @Validated(ValidationGroups.Create.class) LoginReq request)
@@ -64,7 +69,58 @@ public class AuthController {
 	            .body(r);
 
 	}
+	
+	@PostMapping("/refresh")
+	public ResponseEntity<LoginDTO> refresh(@CookieValue(name = "refreshToken", required = false)
+	        String refreshToken) throws Exception{
 
+	    if (refreshToken == null || refreshToken.isBlank()) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	    }
+
+	    // refreshToken is valid?
+	    if (!jwtService.isValidRefreshToken(refreshToken)) {  
+	        return ResponseEntity
+	                .status(HttpStatus.UNAUTHORIZED)
+	                .build();
+	    }
+
+	    String username =jwtService.extractUsername(refreshToken);
+
+	    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+	    Authentication authentication = new UsernamePasswordAuthenticationToken(
+	                    userDetails,
+	                    null,
+	                    userDetails.getAuthorities()
+	            );
+
+	    String newAccessToken = jwtService.generateAccessToken(authentication);
+
+	    LoginDTO response = LoginDTO.builder()
+	            .accessToken(newAccessToken)
+	            .tokenType("Bearer")
+	            .build();
+
+	    return ResponseEntity.ok(response);
+	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<Void> logout() {
+
+	    ResponseCookie cookie = ResponseCookie.from("refreshToken", "")
+	            .httpOnly(true)
+	            .secure(false)        // true in produzione con HTTPS
+	            .sameSite("Lax")
+	            .path("/rest/auth")
+	            .maxAge(0)            // maxAge = 0 -> remove cookie 
+	            .build();
+
+	    return ResponseEntity.ok()
+	            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+	            .build();
+	}
+	
 	@GetMapping("/me")
 	public ResponseEntity<Object> me(Authentication authentication) throws Exception {
 		LoginReq req = new LoginReq();
