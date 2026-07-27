@@ -10,10 +10,10 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CarelloReq {
-
+	@NotNull (groups = ValidationGroups.Update.class , message ="carello_riga_ntfnd")
 	private Integer id;
-	@NotNull (groups = ValidationGroups.Create.class , message ="user_ntfnd")
-	private String utenteID;
+	
+	private String utenteID;  // loaded by autentificator
 	
 	@NotNull (groups = ValidationGroups.Create.class , message ="veicolo_ntfnd")
 	private Integer veicoloID;
