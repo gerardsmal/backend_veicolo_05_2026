@@ -4,9 +4,11 @@ import java.time.LocalDate;
 
 import com.betacom.ve.enums.Roles;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
@@ -37,4 +39,12 @@ public class Utente {
 	
 	@Column (name="data_creazione")
 	private LocalDate dataCreazione;
+	
+	@OneToOne (
+			mappedBy = "utente",
+			cascade = CascadeType.REMOVE
+			)
+	private Carello carello;
+	
+	
 }

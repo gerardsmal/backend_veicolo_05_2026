@@ -34,6 +34,26 @@ public class VeicoloController {
 		
 	}
 	
+	@GetMapping("/public/page")
+	public ResponseEntity<Object> page(
+			@RequestParam (required = true)  Integer page,
+			@RequestParam (required = true)  Integer size,
+			@RequestParam (required = true)  String  sortBy,
+			@RequestParam (required = true)  String  direction,
+			@RequestParam (required = false)  Integer id,
+			@RequestParam (required = false)  Integer tipo,
+			@RequestParam (required = false)  String categoria,
+			@RequestParam (required = false)  String alimentazione,
+			@RequestParam (required = false)  Integer colore,
+			@RequestParam (required = false)  Integer marca,
+			@RequestParam (required = false)  String targa,
+			@RequestParam (required = false)  Integer porte
+			
+			) throws Exception{
+		return ResponseEntity.ok(veiS.findByPage(page, size, sortBy, direction,
+				id, tipo, categoria, alimentazione, colore, marca, targa, porte));
+	}
+	
 	@GetMapping("/public/getById")
 	public ResponseEntity<Object> getById(@RequestParam (required = false)  Integer id) throws Exception{
 		return ResponseEntity.ok(veiS.getById(id));

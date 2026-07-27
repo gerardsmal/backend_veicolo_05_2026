@@ -4,10 +4,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.betacom.ve.dto.input.VeicoloReq;
 import com.betacom.ve.dto.output.VeicoloDTO;
+import com.betacom.ve.dto.output.page.PageResponseDTO;
 import com.betacom.ve.exceptions.AcademyException;
 import com.betacom.ve.mappers.VeicoloMapper;
 import com.betacom.ve.models.Categorie;
@@ -135,4 +140,38 @@ public class VeicoloImpl implements IVeicoliServices{
 		
 		return veiM.builVeicoloDTO(v);
 	}
+
+	@Override
+	public PageResponseDTO<VeicoloDTO> findByPage(Integer page, Integer size, String sortBy, String direction,
+			Integer id, Integer tipo, String categoria, String alimentazione, Integer colore, Integer marca,
+			String targa, Integer porte) {
+		log.debug("findByPage page:{} size:{} {}/{}/{}/{}/{}/{}/{}/{}",page, size, id, tipo, categoria, alimentazione, colore, marca, targa, porte);
+		if (page == null) page=0;
+		if (size == null) size=5;
+		if (sortBy == null) sortBy = "id";
+		if (direction == null) direction = "desc";
+		
+	    Sort.Direction sortDirection =
+	            "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
+
+		
+	    Pageable pageable = PageRequest.of(
+	    		page,
+	    		size,
+	            Sort.by(sortDirection, sortBy)
+	        );
+	    Page<Veicolo> result = veR.searchByFilterPaging(id, tipo, categoria, alimentazione, colore, marca, targa, porte, pageable);
+	    
+	    return PageResponseDTO.<VeicoloDTO>builder()
+	    	    .content(veiM.builVeicoloDTO(result.getContent()))
+	    	    .page(result.getNumber())
+	    	    .size(result.getSize())
+	    	    .totalElements(result.getTotalElements())
+	    	    .totalPages(result.getTotalPages())
+	    	    .first(result.isFirst())
+	    	    .last(result.isLast())
+	    	    .build();
+	    
+	}
+	
 }
