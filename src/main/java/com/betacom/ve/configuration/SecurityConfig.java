@@ -33,6 +33,7 @@ public class SecurityConfig {
 				.sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(auth -> auth
 						.requestMatchers("/rest/auth/**").permitAll()
+						.requestMatchers("/rest/mail/**").permitAll()
 						.requestMatchers("/rest/utente/public/**").permitAll()
 						.requestMatchers("/rest/categorie/public/**").permitAll()
 						.requestMatchers("/rest/colore/public/**").permitAll()

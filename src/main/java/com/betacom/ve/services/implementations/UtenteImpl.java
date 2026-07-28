@@ -4,12 +4,15 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.betacom.ve.configuration.AppProperties;
 import com.betacom.ve.dto.input.ChangePwdReq;
 import com.betacom.ve.dto.input.LoginReq;
+import com.betacom.ve.dto.input.MailReq;
 import com.betacom.ve.dto.input.UtenteReq;
 import com.betacom.ve.dto.output.MeDTO;
 import com.betacom.ve.dto.output.UtenteDTO;
@@ -17,6 +20,7 @@ import com.betacom.ve.enums.Roles;
 import com.betacom.ve.exceptions.AcademyException;
 import com.betacom.ve.models.Utente;
 import com.betacom.ve.repositories.IUtenteRepository;
+import com.betacom.ve.services.interfaces.IMailServices;
 import com.betacom.ve.services.interfaces.IUtenteServices;
 
 
@@ -27,9 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Service
 public class UtenteImpl implements IUtenteServices{
+	
 	private final IUtenteRepository utR;
 	private final PasswordEncoder encoder;
-
+	private final IMailServices mailS;
+	private final AppProperties prop;
+	
 	@Transactional (rollbackFor = Exception.class)
 	@Override
 	public void create(UtenteReq req) throws Exception {
@@ -188,5 +195,52 @@ public class UtenteImpl implements IUtenteServices{
 		utR.save(ut);
 	}
 
+	@Override
+	public void sendResetPassword(String userName) throws Exception {
+		log.debug("sendResetPassword {}", userName);
+		
+		Utente ut = utR.findById(userName)
+				.orElseThrow(() -> new AcademyException("user_ntfnd"));	
+		StringBuilder body = new StringBuilder();
+		body.append("<h2>Vendita Veicoli</h2><br><br>");
+		body.append("Buongiorno ");
+		body.append(ut.getNome());
+		body.append("<br><br>");
+		body.append("<br>Per inizializzare la tua password va sull'URL");
+		body.append("<br><a>"+ prop.getUrlResetPassword()  + ut.getUserName()+ "</a><br>");
+		body.append("<br><br>Il team Vendita Veicoli <br><br>");
 
+		sendMail(ut, "Cambiamento password", body.toString());
+	}
+	
+	@Override
+	public void resetPassword(ChangePwdReq req) throws Exception {
+		log.debug("resetPssword {}", req);
+		Utente ut = utR.findById(req.getUserName())
+				.orElseThrow(() -> new AcademyException("user_ntfnd"));
+
+		Optional.ofNullable(req.getNewPwd())
+			.ifPresentOrElse(pwd -> {
+				ut.setPwd(encoder.encode(req.getNewPwd()));
+			}, () -> { 
+				throw new RuntimeException("user_no_newpwd");
+			});
+		
+		utR.save(ut);
+
+		
+	}
+	
+
+	private void sendMail(Utente account, String oggetto, String body) throws Exception{
+		
+		mailS.sendMail(MailReq.builder()
+				.to(account.getEmail())
+				.oggetto(oggetto)
+				.body(body)
+				.build()
+				);
+		
+
+	}
 }

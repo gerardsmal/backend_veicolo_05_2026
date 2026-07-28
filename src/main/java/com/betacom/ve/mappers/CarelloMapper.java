@@ -24,8 +24,13 @@ public class CarelloMapper {
 		double totale = ut.getCarello().getRigaCarello().stream()
 				.mapToDouble(r -> r.getVeicolo().getPrezzo() * r.getQuantita()).sum();
 
-		return CarelloDTO.builder().id(ut.getCarello().getId()).nome(ut.getNome()).cognome(ut.getCognome())
-				.userName(ut.getUserName()).prezzoTotale(totale).status(ut.getCarello().getStato().toString())
+		return CarelloDTO.builder()
+				.id(ut.getCarello().getId())
+				.nome(ut.getNome())
+				.cognome(ut.getCognome())
+				.userName(ut.getUserName())
+				.prezzoTotale(totale)
+				.status(ut.getCarello().getStato().toString())
 				.carelloDetaglio(buildDetaglioDTO(ut.getCarello().getRigaCarello())).build();
 	}
 
