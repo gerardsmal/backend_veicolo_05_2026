@@ -6,4 +6,6 @@ public interface ValidationGroups {
 
 	interface Update {}
 
+	interface Special {}
+
 }
