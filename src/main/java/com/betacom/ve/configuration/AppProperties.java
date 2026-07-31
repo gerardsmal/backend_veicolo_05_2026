@@ -15,6 +15,7 @@ public class AppProperties {
 	private String clientDomain;
     private String resetPassword;
     private String sender;
+    private String scriptBatch;
     
     public String getUrlResetPassword() {
     	return clientDomain + resetPassword;
