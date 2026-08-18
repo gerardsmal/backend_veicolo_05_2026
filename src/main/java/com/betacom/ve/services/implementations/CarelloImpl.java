@@ -13,11 +13,11 @@ import com.betacom.ve.exceptions.AcademyException;
 import com.betacom.ve.mappers.CarelloMapper;
 import com.betacom.ve.models.Carello;
 import com.betacom.ve.models.CarelloDetails;
-import com.betacom.ve.models.Utente;
+import com.betacom.ve.models.User;
 import com.betacom.ve.models.Veicolo;
 import com.betacom.ve.repositories.ICarelloDetailsRepository;
 import com.betacom.ve.repositories.ICarelloRepository;
-import com.betacom.ve.repositories.IUtenteRepository;
+import com.betacom.ve.repositories.IUserRepository;
 import com.betacom.ve.repositories.IVeicoloRepository;
 import com.betacom.ve.services.interfaces.ICarelloServices;
 
@@ -32,7 +32,7 @@ public class CarelloImpl implements ICarelloServices{
 
 	private final ICarelloRepository carelloR;
 	private final ICarelloDetailsRepository rigaR;
-	private final IUtenteRepository  utenteR;
+	private final IUserRepository  utenteR;
 	private final IVeicoloRepository veicoloR;
 	private final CarelloMapper carelloM;
 	
@@ -40,7 +40,7 @@ public class CarelloImpl implements ICarelloServices{
 	@Override
 	public void addRiga(CarelloReq req) throws Exception {
 		log.debug("addRiga {}" , req);
-		Utente ut = utenteR.findById(req.getUtenteID())
+		User ut = utenteR.findById(req.getUtenteID())
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 				
 		Carello carello = (ut.getCarello() != null) ? ut.getCarello() : createCarello(ut);
@@ -59,11 +59,11 @@ public class CarelloImpl implements ICarelloServices{
 	}
 	
 	@Transactional
-	public Carello createCarello(Utente ut) throws Exception{
+	public Carello createCarello(User ut) throws Exception{
 		log.debug("createCarello {}", ut.getUserName());
 		Carello car = new Carello();
 		car.setDataCreazione(LocalDate.now());
-		car.setUtente(ut);
+		car.setUser(ut);
 		car.setStato(StatoCarello.valueOf("carello"));
 		car.setId(carelloR.save(car).getId());
 		return car;
@@ -84,7 +84,7 @@ public class CarelloImpl implements ICarelloServices{
 	public void updateRiga(CarelloReq req) throws Exception {
 		log.debug("updateRiga {}" , req);
 		
-		Utente ut = utenteR.findById(req.getUtenteID())
+		User ut = utenteR.findById(req.getUtenteID())
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 
 		controlCarello(ut.getCarello());
@@ -98,10 +98,10 @@ public class CarelloImpl implements ICarelloServices{
 	}
 	@Transactional
 	@Override
-	public void deleteRiga(String userName, Integer id) throws Exception {
-		log.debug("deleteRiga {}/{}" ,userName,id);
+	public void deleteRiga(Long userId, Integer id) throws Exception {
+		log.debug("deleteRiga {}/{}" ,userId,id);
 
-		Utente ut = utenteR.findById(userName)
+		User ut = utenteR.findById(userId)
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 
 		controlCarello(ut.getCarello());
@@ -120,10 +120,10 @@ public class CarelloImpl implements ICarelloServices{
 	}
 
 	@Override
-	public CarelloDTO getCarello(String userName) throws Exception {
-		log.debug("getCarello {}" ,userName);
+	public CarelloDTO getCarello(Long userId) throws Exception {
+		log.debug("getCarello {}" ,userId);
 		
-		Utente ut = utenteR.findById(userName)
+		User ut = utenteR.findById(userId)
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 		
 		return carelloM.builCarelloDTO(ut);

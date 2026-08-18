@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.betacom.ve.dto.output.CarelloDTO;
 import com.betacom.ve.dto.output.CarelloDetaglioDTO;
 import com.betacom.ve.models.CarelloDetails;
-import com.betacom.ve.models.Utente;
+import com.betacom.ve.models.User;
 import com.betacom.ve.services.interfaces.IUploadServices;
 
 import lombok.RequiredArgsConstructor;
@@ -18,7 +18,7 @@ public class CarelloMapper {
 
 	private final IUploadServices uplS;
 
-	public CarelloDTO builCarelloDTO(Utente ut) {
+	public CarelloDTO builCarelloDTO(User ut) {
 		if (ut.getCarello() == null)
 			return null;
 		double totale = ut.getCarello().getRigaCarello().stream()

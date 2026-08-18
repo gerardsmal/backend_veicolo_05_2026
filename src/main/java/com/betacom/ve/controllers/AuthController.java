@@ -23,7 +23,7 @@ import com.betacom.ve.dto.input.ValidationGroups;
 import com.betacom.ve.dto.output.LoginDTO;
 import com.betacom.ve.security.CustomUserDetailsService;
 import com.betacom.ve.security.interfaces.JwtServices;
-import com.betacom.ve.services.interfaces.IUtenteServices;
+import com.betacom.ve.services.interfaces.IUserServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("rest/auth")
 public class AuthController {
 
-	private final IUtenteServices utS;
+	private final IUserServices utS;
 	private final AuthenticationManager authenticationManager;
 	private final JwtServices jwtService;
 	private final CustomUserDetailsService userDetailsService;

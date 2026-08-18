@@ -17,7 +17,7 @@ import com.betacom.ve.dto.input.ValidationGroups;
 import com.betacom.ve.dto.output.ResponseDTO;
 import com.betacom.ve.services.interfaces.ICarelloServices;
 import com.betacom.ve.services.interfaces.IMessageServices;
-import com.betacom.ve.services.interfaces.IUtenteServices;
+import com.betacom.ve.services.interfaces.IUserServices;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class CarelloController {
 			@RequestBody(required = true) @Validated(ValidationGroups.Create.class) CarelloReq req) throws Exception {
 
 		ResponseDTO r = new ResponseDTO();
-		req.setUtenteID(authentication.getName());
+	//	req.setUtenteID(authentication.getName());
 		carS.addRiga(req);
 		r.setMsg(msgS.get("rest_created"));
 		return ResponseEntity.ok(r);
@@ -43,7 +43,7 @@ public class CarelloController {
 	public ResponseEntity<ResponseDTO> updateRiga(Authentication authentication,
 			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) CarelloReq req) throws Exception {
 		ResponseDTO r = new ResponseDTO();
-		req.setUtenteID(authentication.getName());
+	//	req.setUtenteID(authentication.getName());
 		carS.updateRiga(req);
 		r.setMsg(msgS.get("rest_updated"));
 		return ResponseEntity.ok(r);
@@ -53,7 +53,7 @@ public class CarelloController {
 	public ResponseEntity<ResponseDTO> delete(Authentication authentication,
 			@PathVariable(required = true) Integer id) throws Exception {
 		ResponseDTO r = new ResponseDTO();
-		carS.deleteRiga(authentication.getName(),id);
+	//	carS.deleteRiga(authentication.getName(),id);
 		r.setMsg(msgS.get("rest_deleted"));
 		return ResponseEntity.ok(r);
 	}
@@ -61,7 +61,7 @@ public class CarelloController {
 	@GetMapping("/user/list")
 	public ResponseEntity<Object> list(Authentication authentication) throws Exception{
 
-		return ResponseEntity.ok(carS.getCarello(authentication.getName()));
-
+	//	return ResponseEntity.ok(carS.getCarello(authentication.getName()));
+		return null;
 	}
 }

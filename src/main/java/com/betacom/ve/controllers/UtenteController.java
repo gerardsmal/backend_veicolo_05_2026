@@ -16,12 +16,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.betacom.ve.dto.input.ChangePwdReq;
-import com.betacom.ve.dto.input.UtenteReq;
+import com.betacom.ve.dto.input.UserReq;
 import com.betacom.ve.dto.input.ValidationGroups;
 import com.betacom.ve.dto.output.ResponseDTO;
 import com.betacom.ve.exceptions.AcademyException;
 import com.betacom.ve.services.interfaces.IMessageServices;
-import com.betacom.ve.services.interfaces.IUtenteServices;
+import com.betacom.ve.services.interfaces.IUserServices;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,12 +32,12 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("rest/utente")
 public class UtenteController {
 
-	private final IUtenteServices utS;
+	private final IUserServices utS;
 	private final IMessageServices msgS;
 
 	@PostMapping("/public/create")
 	public ResponseEntity<ResponseDTO> create(
-			@RequestBody(required = true) @Validated(ValidationGroups.Create.class) UtenteReq req) throws Exception {
+			@RequestBody(required = true) @Validated(ValidationGroups.Create.class) UserReq req) throws Exception {
 		ResponseDTO r = new ResponseDTO();
 
 		utS.create(req);
@@ -47,7 +47,7 @@ public class UtenteController {
 
 	@PatchMapping("/admin/updateAdmin")
 	public ResponseEntity<ResponseDTO> updateAdmin(
-			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) UtenteReq req,
+			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) UserReq req,
 			Authentication authentication) throws Exception {
 		boolean isAdmin = authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
@@ -63,7 +63,7 @@ public class UtenteController {
 
 	@PatchMapping("/user/update")
 	public ResponseEntity<ResponseDTO> update(
-			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) UtenteReq req,
+			@RequestBody(required = true) @Validated(ValidationGroups.Update.class) UserReq req,
 			Authentication authentication) throws Exception {
 
 		req.setUserName(authentication.getName());
@@ -85,7 +85,7 @@ public class UtenteController {
 	}
 
 	@DeleteMapping("/admin/delete/{id}")
-	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true) String id) throws Exception {
+	public ResponseEntity<ResponseDTO> delete(@PathVariable(required = true) Long id) throws Exception {
 		ResponseDTO r = new ResponseDTO();
 		utS.delete(id);
 		r.setMsg(msgS.get("rest_deleted"));
@@ -94,20 +94,20 @@ public class UtenteController {
 
 	@GetMapping("/admin/list")
 	public ResponseEntity<Object> list(@RequestParam(required = false) String userName,
-			@RequestParam(required = false) String nome, @RequestParam(required = false) String cognome,
-			@RequestParam(required = false) String role) throws Exception {
+			@RequestParam(required = false) String nome, @RequestParam(required = false) String cognome)
+			 throws Exception {
 
-		return ResponseEntity.ok(utS.list(userName, nome, cognome, role));
+		return ResponseEntity.ok(utS.list(userName, nome, cognome));
 
 	}
 
 	@GetMapping("/user/getById")
-	public ResponseEntity<Object> getById(@RequestParam(required = false) String userName,
+	public ResponseEntity<Object> getById(@RequestParam(required = false) Long userId,
 			Authentication authentication) throws Exception {
-		if (userName == null)
-			userName = authentication.getName();
+//		if (userName == null)
+//			userName = authentication.getName();
 
-		return ResponseEntity.ok(utS.getById(userName));
+		return ResponseEntity.ok(utS.getById(userId));
 
 	}
 

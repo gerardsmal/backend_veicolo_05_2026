@@ -13,7 +13,7 @@ public class CarelloReq {
 	@NotNull (groups = ValidationGroups.Update.class , message ="carello_riga_ntfnd")
 	private Integer id;
 	
-	private String utenteID;  // loaded by autentificator
+	private Long utenteID;  // loaded by autentificator
 	
 	@NotNull (groups = ValidationGroups.Create.class , message ="veicolo_ntfnd")
 	private Integer veicoloID;
