@@ -13,6 +13,9 @@ public class UserReq {
 
 	@NotNull (groups = {ValidationGroups.Update.class} , message ="user_incomplete")
 	private Long id;
+	
+	@NotNull (groups = {ValidationGroups.Create.class} , message ="user_incomplete")
+	private String userName;
 
 	@NotNull (groups = ValidationGroups.Create.class , message ="user_incomplete")
 	@Pattern(

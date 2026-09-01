@@ -33,8 +33,8 @@ public class CustomUserDetailsService implements UserDetailsService{
 
 		return User.builder()
                 .username(ut.getUserName())
-//                .password(ut.getPwd()) 
-//                .roles(ut.getRole().toString())       // "ADMIN" o "USER"
+                .password(ut.getPwd()) 
+                .roles(ut.getRole().toString())       // "ADMIN" o "USER"
                 .build();
 
 	}
