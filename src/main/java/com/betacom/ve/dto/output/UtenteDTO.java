@@ -7,10 +7,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class UserDTO {
-	private Long  id;
+public class UtenteDTO {
+
 	private String userName;
-	private String keycloakSubject;
+	private String pwd;
+	private String  role;
 	private String nome;
 	private String cognome;
 	private Boolean sesso;
@@ -20,5 +21,5 @@ public class UserDTO {
 	private String comune;
 	private String cap;
 	private Boolean isValidate;
-	
+
 }

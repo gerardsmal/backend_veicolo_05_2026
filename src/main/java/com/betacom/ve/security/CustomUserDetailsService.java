@@ -6,7 +6,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.betacom.ve.repositories.IUserRepository;
+import com.betacom.ve.models.Utente;
+import com.betacom.ve.repositories.IUtenteRepository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,20 +23,20 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService{
 
-	private final IUserRepository utR;
-	
+	private final IUtenteRepository utR;
+
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		log.debug("loadUserByUsername: {}", username);
-		
-		com.betacom.ve.models.User ut = utR.findByUserName(username)
+
+		Utente ut = utR.findById(username)
 				.orElseThrow(() -> new UsernameNotFoundException("login_invalid"));
 
 		return User.builder()
-                .username(ut.getUserName())
-                .password(ut.getPwd()) 
-                .roles(ut.getRole().toString())       // "ADMIN" o "USER"
-                .build();
+				.username(ut.getUserName())
+				.password(ut.getPwd())
+				.roles(ut.getRole().toString())       // "ADMIN" o "USER"
+				.build();
 
 	}
 }

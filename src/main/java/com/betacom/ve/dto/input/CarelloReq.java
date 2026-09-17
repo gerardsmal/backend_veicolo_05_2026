@@ -12,12 +12,12 @@ import lombok.ToString;
 public class CarelloReq {
 	@NotNull (groups = ValidationGroups.Update.class , message ="carello_riga_ntfnd")
 	private Integer id;
-	
-	private Long utenteID;  // loaded by autentificator
-	
+
+	private String utenteID;  // loaded by autentificator
+
 	@NotNull (groups = ValidationGroups.Create.class , message ="veicolo_ntfnd")
 	private Integer veicoloID;
-	
+
 	@NotNull (groups = ValidationGroups.Create.class , message ="veicolo_ntfnd")
 	@Min( value = 1, groups = { ValidationGroups.Create.class, ValidationGroups.Update.class},message = "carello_quantita_ko")
 	private Integer quantita;

@@ -13,11 +13,11 @@ import com.betacom.ve.exceptions.AcademyException;
 import com.betacom.ve.mappers.CarelloMapper;
 import com.betacom.ve.models.Carello;
 import com.betacom.ve.models.CarelloDetails;
-import com.betacom.ve.models.User;
+import com.betacom.ve.models.Utente;
 import com.betacom.ve.models.Veicolo;
 import com.betacom.ve.repositories.ICarelloDetailsRepository;
 import com.betacom.ve.repositories.ICarelloRepository;
-import com.betacom.ve.repositories.IUserRepository;
+import com.betacom.ve.repositories.IUtenteRepository;
 import com.betacom.ve.repositories.IVeicoloRepository;
 import com.betacom.ve.services.interfaces.ICarelloServices;
 
@@ -32,19 +32,19 @@ public class CarelloImpl implements ICarelloServices{
 
 	private final ICarelloRepository carelloR;
 	private final ICarelloDetailsRepository rigaR;
-	private final IUserRepository  utenteR;
+	private final IUtenteRepository  utenteR;
 	private final IVeicoloRepository veicoloR;
 	private final CarelloMapper carelloM;
-	
+
 	@Transactional
 	@Override
 	public void addRiga(CarelloReq req) throws Exception {
 		log.debug("addRiga {}" , req);
-		User ut = utenteR.findById(req.getUtenteID())
+		Utente ut = utenteR.findById(req.getUtenteID())
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
-				
+
 		Carello carello = (ut.getCarello() != null) ? ut.getCarello() : createCarello(ut);
-		
+
 		controlCarello(carello);
 
 		CarelloDetails riga = new CarelloDetails();
@@ -55,77 +55,77 @@ public class CarelloImpl implements ICarelloServices{
 		riga.setVeicolo(veicolo);
 		riga.setQuantita(req.getQuantita());
 		rigaR.save(riga);
-		
+
 	}
-	
+
 	@Transactional
-	public Carello createCarello(User ut) throws Exception{
+	public Carello createCarello(Utente ut) throws Exception{
 		log.debug("createCarello {}", ut.getUserName());
 		Carello car = new Carello();
 		car.setDataCreazione(LocalDate.now());
-		car.setUser(ut);
+		car.setUtente(ut);
 		car.setStato(StatoCarello.valueOf("carello"));
 		car.setId(carelloR.save(car).getId());
 		return car;
 	}
-	
+
 
 	private void controlCarello(Carello carello) throws Exception{
 		Optional.ofNullable(carello.getStato())
-		.filter(stato -> stato == StatoCarello.valueOf("ordine"))
-		.ifPresent(stato -> {
-			throw new AcademyException("carello_not_available");
-		});
+				.filter(stato -> stato == StatoCarello.valueOf("ordine"))
+				.ifPresent(stato -> {
+					throw new AcademyException("carello_not_available");
+				});
 
 	}
-	
+
 	@Transactional
 	@Override
 	public void updateRiga(CarelloReq req) throws Exception {
 		log.debug("updateRiga {}" , req);
-		
-		User ut = utenteR.findById(req.getUtenteID())
+
+		Utente ut = utenteR.findById(req.getUtenteID())
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 
 		controlCarello(ut.getCarello());
 
 		CarelloDetails riga = searchRigaCarello(ut.getCarello(), req.getId());
-		
+
 		Optional.ofNullable(req.getQuantita()).ifPresent(riga::setQuantita);
 
 		rigaR.save(riga);
-		
+
 	}
 	@Transactional
 	@Override
-	public void deleteRiga(Long userId, Integer id) throws Exception {
-		log.debug("deleteRiga {}/{}" ,userId,id);
+	public void deleteRiga(String userName, Integer id) throws Exception {
+		log.debug("deleteRiga {}/{}" ,userName,id);
 
-		User ut = utenteR.findById(userId)
+		Utente ut = utenteR.findById(userName)
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 
 		controlCarello(ut.getCarello());
 
 		CarelloDetails riga = searchRigaCarello(ut.getCarello(), id);
-		
+
 		rigaR.delete(riga);
-		
+
 	}
-	
+
 	private CarelloDetails searchRigaCarello(Carello carello, Integer idRiga) {
 		return carello.getRigaCarello().stream()
-		        .filter(car -> Objects.equals(car.getId(), idRiga))
-		        .findFirst()
-		        .orElseThrow(() -> new AcademyException("carello_riga_ntfnd"));		
+				.filter(car -> Objects.equals(car.getId(), idRiga))
+				.findFirst()
+				.orElseThrow(() -> new AcademyException("carello_riga_ntfnd"));
 	}
 
 	@Override
-	public CarelloDTO getCarello(Long userId) throws Exception {
-		log.debug("getCarello {}" ,userId);
-		
-		User ut = utenteR.findById(userId)
+	public CarelloDTO getCarello(String userName) throws Exception {
+		log.debug("getCarello {}" ,userName);
+
+		Utente ut = utenteR.findById(userName)
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
-		
+
 		return carelloM.builCarelloDTO(ut);
 	}
 

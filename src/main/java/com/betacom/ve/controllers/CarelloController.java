@@ -17,7 +17,6 @@ import com.betacom.ve.dto.input.ValidationGroups;
 import com.betacom.ve.dto.output.ResponseDTO;
 import com.betacom.ve.services.interfaces.ICarelloServices;
 import com.betacom.ve.services.interfaces.IMessageServices;
-import com.betacom.ve.services.interfaces.IUserServices;
 
 import lombok.RequiredArgsConstructor;
 
