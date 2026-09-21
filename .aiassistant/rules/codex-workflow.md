@@ -27,3 +27,10 @@ apply: always
 ## Safety
 - Never expose, print, commit, or copy passwords, tokens, API keys, client secrets, or other credentials.
 - Do not modify secret or environment-specific configuration unless explicitly requested.
+
+## Local database access
+- Spring Boot tests in this project require PostgreSQL on localhost:5432.
+- When running tests with the local profile, request the required localhost/database access before starting Maven.
+- Do not first attempt the test inside the restricted sandbox if localhost access is required.
+- Use:
+  `./mvnw test -Dspring.profiles.active=local`
