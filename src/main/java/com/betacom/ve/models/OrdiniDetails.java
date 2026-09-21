@@ -13,15 +13,13 @@ import java.time.LocalDate;
 public class OrdiniDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     @Column(name="data_aggiunto_carrello")
     private LocalDate dataCreazione;
 
     private Integer quantita;
     private String productName;
-    private String artist;
-    private String genere;
     private String image;
 
     @Column(name="prezzo_unitatio")
