@@ -1,15 +1,11 @@
 package com.betacom.ve.models;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.betacom.ve.enums.Roles;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -46,5 +42,10 @@ public class Utente {
 	)
 	private Carello carello;
 
+	@OneToMany(
+			mappedBy = "utente",
+			fetch = FetchType.EAGER
+	)
+	private List<Spedizione> spedizione;
 
 }
