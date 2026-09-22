@@ -13,7 +13,6 @@ import lombok.ToString;
 @ToString
 public class SpedizioneReq {
 
-	@NotNull(groups = ValidationGroups.Update.class, message = "spedizione_id_invalid")
 	private Integer id;
 
 	@NotNull(groups = ValidationGroups.Create.class, message = "spedizione_predefinito_invalid")

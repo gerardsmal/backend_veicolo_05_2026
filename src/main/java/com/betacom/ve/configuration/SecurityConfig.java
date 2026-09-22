@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -45,6 +46,7 @@ public class SecurityConfig {
 						.requestMatchers("/rest/veicolo/public/**").permitAll()
 						.requestMatchers("/images/**").permitAll() 
 		                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
+		                .requestMatchers(HttpMethod.POST, "/rest/ordini/user/create").hasRole("USER")
 		                
 		                .requestMatchers("/rest/utente/admin/**").hasRole("ADMIN")
 		                .requestMatchers("/rest/macchina/admin/**").hasRole("ADMIN")

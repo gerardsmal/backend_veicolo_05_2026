@@ -30,8 +30,7 @@ public class Ordini {
     private Double totale;
 
     @Column (name="numero_ordine",
-            unique=true,
-            nullable = false)
+            unique=true)
     private String numeroOrdine;
 
     @ManyToOne

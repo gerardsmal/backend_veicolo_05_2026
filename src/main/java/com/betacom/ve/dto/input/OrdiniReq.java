@@ -1,6 +1,5 @@
 package com.betacom.ve.dto.input;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,14 +16,6 @@ public class OrdiniReq {
 	)
 	private Integer id;
 
-	@NotNull(
-			groups = ValidationGroups.Create.class,
-			message = "ordine_utente_invalid"
-	)
-	@NotBlank(
-			groups = ValidationGroups.Create.class,
-			message = "ordine_utente_invalid"
-	)
 	private String userName;
 
 	private Integer spedizioneID;
