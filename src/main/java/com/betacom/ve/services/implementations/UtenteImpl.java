@@ -18,6 +18,7 @@ import com.betacom.ve.dto.output.MeDTO;
 import com.betacom.ve.dto.output.UtenteDTO;
 import com.betacom.ve.enums.Roles;
 import com.betacom.ve.exceptions.AcademyException;
+import com.betacom.ve.mappers.UtenteMapper;
 import com.betacom.ve.models.Utente;
 import com.betacom.ve.repositories.IUtenteRepository;
 import com.betacom.ve.services.interfaces.IMailServices;
@@ -119,21 +120,7 @@ public class UtenteImpl implements IUtenteServices{
 
 		List<Utente> lU = utR.selectByFilter(userName, nome, cognome, ro);
 
-		return lU.stream()
-				.map((u -> UtenteDTO.builder()
-						.userName(u.getUserName())
-						.nome(u.getNome())
-						.cognome(u.getCognome())
-						.via(u.getVia())
-						.comune(u.getComune())
-						.cap(u.getCap())
-						.email(u.getEmail())
-						.role(u.getRole().toString())
-						.sesso(u.getSesso())
-						.telefono(u.getTelefono())
-						.isValidate(u.getValidate())
-						.build())
-				).toList();
+		return UtenteMapper.utenteToDTO(lU);
 
 	}
 
@@ -143,19 +130,7 @@ public class UtenteImpl implements IUtenteServices{
 		Utente u = utR.findById(userName)
 				.orElseThrow(() -> new AcademyException("user_ntfnd"));
 
-		return UtenteDTO.builder()
-				.userName(u.getUserName())
-				.nome(u.getNome())
-				.cognome(u.getCognome())
-				.via(u.getVia())
-				.comune(u.getComune())
-				.cap(u.getCap())
-				.email(u.getEmail())
-				.role(u.getRole().toString())
-				.sesso(u.getSesso())
-				.telefono(u.getTelefono())
-				.isValidate(u.getValidate())
-				.build();
+		return UtenteMapper.utenteToDTO(u);
 	}
 
 
