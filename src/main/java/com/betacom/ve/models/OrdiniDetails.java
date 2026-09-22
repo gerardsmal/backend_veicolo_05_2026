@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 @Entity
-@Table (name = "ordini-detagli")
+@Table(name = "ordini_dettagli")
 public class OrdiniDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class OrdiniDetails {
     private String productName;
     private String image;
 
-    @Column(name="prezzo_unitatio")
+    @Column(name = "prezzo_unitario")
     private double prezzoUnit;
 
     @Column(name="prezzo_da_pagare")
