@@ -45,7 +45,8 @@ public class Carello {
 	@OneToMany(
 			mappedBy = "carello",
 			fetch = FetchType.EAGER,
-			cascade = CascadeType.REMOVE
+			cascade = CascadeType.REMOVE,
+			orphanRemoval = true
 	)
 	private List<CarelloDetails> rigaCarello;
 }

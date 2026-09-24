@@ -15,9 +15,6 @@ public class SpedizioneReq {
 
 	private Integer id;
 
-	@NotNull(groups = ValidationGroups.Create.class, message = "spedizione_predefinito_invalid")
-	private Boolean predefinito;
-
 	@NotNull(groups = ValidationGroups.Create.class, message = "spedizione_nome_invalid")
 	@NotBlank(groups = ValidationGroups.Create.class, message = "spedizione_nome_invalid")
 	@Size(max = 100, groups = {ValidationGroups.Create.class, ValidationGroups.Update.class}, message = "spedizione_nome_invalid")
@@ -45,8 +42,4 @@ public class SpedizioneReq {
 			message = "spedizione_cap_invalid"
 	)
 	private String cap;
-
-	@NotNull(groups = ValidationGroups.Create.class, message = "spedizione_utente_invalid")
-	@NotBlank(groups = ValidationGroups.Create.class, message = "spedizione_utente_invalid")
-	private String utenteID;
 }

@@ -44,6 +44,7 @@ public class SecurityConfig {
 						.requestMatchers("/rest/tipoVeicolo/public/**").permitAll()
 						.requestMatchers("/rest/marca/public/**").permitAll()
 						.requestMatchers("/rest/veicolo/public/**").permitAll()
+						.requestMatchers(HttpMethod.GET, "/rest/ordini/public/listModalitaPagamento").permitAll()
 						.requestMatchers("/images/**").permitAll() 
 		                .requestMatchers("/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**").permitAll()
 		                .requestMatchers(HttpMethod.POST, "/rest/ordini/user/create").hasRole("USER")

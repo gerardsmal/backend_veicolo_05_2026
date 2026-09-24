@@ -48,4 +48,7 @@ public class Utente {
 	)
 	private List<Spedizione> spedizione;
 
+	@OneToMany(mappedBy = "utente")
+	private List<Ordini> ordini;
+
 }

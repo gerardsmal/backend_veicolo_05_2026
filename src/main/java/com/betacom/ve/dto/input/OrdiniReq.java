@@ -16,8 +16,6 @@ public class OrdiniReq {
 	)
 	private Integer id;
 
-	private String userName;
-
 	private Integer spedizioneID;
 
 	private Integer modalitaPagamentoID;
